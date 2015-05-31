@@ -1,0 +1,16 @@
+INPUT(
+./debug\main.o
+./debug\gamewindow.o
+./debug\square.o
+./debug\menuwindow.o
+./debug\winwindow.o
+./debug\losewindow.o
+./debug\chartswindow.o
+./debug\qrc_res.o
+./debug\moc_gamewindow.o
+./debug\moc_square.o
+./debug\moc_menuwindow.o
+./debug\moc_winwindow.o
+./debug\moc_losewindow.o
+./debug\moc_chartswindow.o
+);

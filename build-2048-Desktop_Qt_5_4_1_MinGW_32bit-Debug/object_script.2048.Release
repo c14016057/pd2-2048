@@ -1,0 +1,16 @@
+INPUT(
+./release\main.o
+./release\gamewindow.o
+./release\square.o
+./release\menuwindow.o
+./release\winwindow.o
+./release\losewindow.o
+./release\chartswindow.o
+./release\qrc_res.o
+./release\moc_gamewindow.o
+./release\moc_square.o
+./release\moc_menuwindow.o
+./release\moc_winwindow.o
+./release\moc_losewindow.o
+./release\moc_chartswindow.o
+);

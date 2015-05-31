@@ -1,0 +1,166 @@
+1.class-gamewindow:主要遊戲畫面
+headerfile:
+#include<QtGui>
+#include <QWidget>
+#include "square.h"
+#include"menuwindow.h"
+#include"winwindow.h"
+#include"losewindow.h"
+#include"chartswindow.h"
+#include<QSound>
+struct node{
+    int score;
+    struct node *link;
+};
+namespace Ui {
+class gamewindow;
+}
+
+class gamewindow : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit gamewindow(QWidget *parent = 0);//數字塊初始化並連結各個signal和slot
+    ~gamewindow();//將排行榜內容寫回文字檔
+    void keyPressEvent(QKeyEvent *event);//鍵盤輸入並執行遊戲邏輯
+
+private slots:
+    void on_menuButton_clicked();//打開選單
+    void keepgoinggame();//讓遊戲從暫停回到繼續
+    void newgame();//開新遊戲
+    void on_chartsButton_clicked();//更新排行榜並顯示
+
+private:
+    menuwindow *gamemenu;//選單
+    winwindow *gamewinwindow;//贏畫面
+    losewindow *gamelosewindow;//輸畫面
+    chartswindow *gamechartswindow;//旁行榜
+    void checkwin();//檢查是否贏，並將分數寫入排行榜
+    void boradupdate();//更新遊戲主要畫面
+    void give_a_number();//產生一個新的2或4格子，並即時更新分數
+    void checklose();//檢查是否輸，並將分數寫入排行榜
+    void addnode(struct node *alist,struct node *addnode);//將一個點插入鏈結串列，以完成排序分數
+    void checkbestscore();//檢查分數是否超過最高分并更新最高分
+    Ui::gamewindow *ui;
+    square *square_00;//16格數字塊
+    square *square_01;
+    square *square_02;
+    square *square_03;
+    square *square_10;
+    square *square_11;
+    square *square_12;
+    square *square_13;
+    square *square_20;
+    square *square_21;
+    square *square_22;
+    square *square_23;
+    square *square_30;
+    square *square_31;
+    square *square_32;
+    square *square_33;
+    int number_matrix[4][4];//由矩陣紀錄遊戲邏輯
+    int score;//當前分數
+    int bestscore;//最高分數
+    int win;//避免checkwin()執行多次導致排行榜出現錯誤
+    struct node* first;//鏈結串列的頭
+};
+2.class-square:數字塊
+#include <QObject>
+#include <QLabel>
+//class QLabel;
+class square : public QObject
+{
+    Q_OBJECT
+public:
+    explicit square(QWidget *parent,int Col,int Row,int Number);//初始化數字塊
+    void setChange(int col,int row,int number);//改變數字塊的值和位置
+    void setshow();//顯示
+    void sethide();//隱藏
+signals:
+
+public slots:
+
+private:
+    QLabel *numberblock;//數字塊以label呈現
+    int col;//數字塊的位置
+    int row;
+    int number;//數字塊的值
+
+};
+3.class-menuwindows:選單畫面
+#include <QWidget>
+namespace Ui {
+class menuwindow;
+}
+
+class menuwindow : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit menuwindow(QWidget *parent = 0);
+    ~menuwindow();
+signals:
+    void keep_going();//兩個signal按下按鈕後會觸發
+    void new_game();
+private slots:
+
+    void on_keepgoing_clicked();//兩個觸發signal之按鈕
+
+    void on_newgame_clicked();
+
+private:
+    Ui::menuwindow *ui;
+};
+4.class-winwindow/losewindow:輸或贏的畫面
+#include <QWidget>
+
+namespace Ui {
+class winwindow;
+}
+
+class winwindow : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit winwindow(QWidget *parent = 0);
+    ~winwindow();
+    void setScore(int n);//畫面上顯示分數
+signals:
+    void keep_going();
+    void new_game();
+
+private slots:
+    void on_keepgoingButton_clicked();
+
+    void on_newgameButton_clicked();
+
+private:
+    Ui::winwindow *ui;
+};
+5.class-chartswindow:排行榜
+#include <QWidget>
+
+namespace Ui {
+class chartswindow;
+}
+
+class chartswindow : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit chartswindow(QWidget *parent = 0);//從文字檔內讀資料並以鏈結串列方式儲存
+    ~chartswindow();
+    void setcharts(int n,int score);//設定旁行榜第n名有score分
+signals:
+    void keep_going();
+private slots:
+    void on_pushButton_clicked();
+
+private:
+    Ui::chartswindow *ui;
+};
+6.bouns:有排行榜，遊戲有聲音
